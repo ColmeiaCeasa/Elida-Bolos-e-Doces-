@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elida Bolos e Doces - Pedido Online</title>
+    <title>Candy Delight - Loja Online</title>
     <style>
-        :root { --rosa: #ff85a2; --vinho: #8a2b42; --bg: #fff5f7; --verde: #25d366; --cinza: #ccc; }
+        :root { --rosa: #ff85a2; --vinho: #8a2b42; --bg: #fff5f7; --verde: #25d366; }
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 120px; }
         header { background: var(--rosa); color: white; text-align: center; padding: 20px; }
         .container { max-width: 600px; margin: auto; padding: 15px; }
 
-        /* Campos de Identificação */
+        /* Identificação */
         .user-info { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .user-info label { font-size: 0.9rem; font-weight: bold; color: var(--vinho); display: block; margin-bottom: 5px; margin-top: 10px; }
-        .user-info input, .user-info select { width: 100%; height: 45px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+        .user-info label { font-size: 0.85rem; font-weight: bold; color: var(--vinho); display: block; margin-top: 10px; }
+        .user-info input, .user-info select { width: 100%; height: 45px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; }
         .row-info { display: flex; gap: 10px; }
         .col-half { flex: 1; }
 
         /* Lista de Produtos */
-        .produto-item { background: white; border-radius: 12px; display: flex; align-items: center; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; }
-        .produto-item.indisponivel { opacity: 0.6; filter: grayscale(1); }
+        .produto-item { background: white; border-radius: 12px; display: flex; align-items: center; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .produto-item.esgotado { opacity: 0.5; filter: grayscale(1); }
         .produto-item img { width: 65px; height: 65px; border-radius: 8px; object-fit: cover; }
         .detalhes { flex: 1; padding: 0 12px; }
-        .esgotado-label { color: red; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; }
+        .status-esgotado { color: red; font-weight: bold; font-size: 0.75rem; }
 
         .controles { display: flex; align-items: center; gap: 10px; }
-        .btn-qtd { background: var(--rosa); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
-        .btn-qtd:disabled { background: var(--cinza); cursor: not-allowed; }
+        .btn-qtd { background: var(--rosa); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+        .btn-qtd:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* Barra Fixa Inferior */
-        .footer-fixo { position: fixed; bottom: 0; width: 100%; background: white; border-top: 3px solid var(--rosa); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        /* Barra Fixa */
+        .footer-fixo { position: fixed; bottom: 0; width: 100%; background: white; border-top: 3px solid var(--rosa); padding: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 999; }
         .total-box { font-size: 1.2rem; font-weight: bold; color: var(--vinho); }
         .btn-revisar { background: var(--rosa); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; }
 
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; }
+        .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 80vh; overflow-y: auto; }
         .resumo-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; }
         .btn-confirmar { background: var(--verde); color: white; width: 100%; border: none; padding: 15px; border-radius: 10px; margin-top: 15px; font-weight: bold; cursor: pointer; }
         .btn-voltar { background: #eee; width: 100%; border: none; padding: 10px; border-radius: 10px; margin-top: 10px; cursor: pointer; }
@@ -44,25 +44,24 @@
 </head>
 <body>
 
-<header><h1>🍬Elida Bolos e Doces</h1></header>
+<header><h1>🍬 Candy Delight</h1></header>
 
 <div class="container">
     <div class="user-info">
         <label>Seu Nome:</label>
-        <input type="text" id="nome-cliente" placeholder="Seu nome aqui?">
+        <input type="text" id="nome-cliente" placeholder="Como te chamamos?">
         
         <div class="row-info">
             <div class="col-half"><label>Data:</label><input type="date" id="data-pedido"></div>
             <div class="col-half">
                 <label>Tipo:</label>
                 <select id="tipo-entrega" onchange="toggleFrete()">
-                    <option value="Entrega">🚀 Entregar</option>
-                    <option value="Retirada">🛍️ Retirar</option>
+                    <option value="Entrega">🚀 Entrega</option>
+                    <option value="Retirada">🛍️ Retirada</option>
                 </select>
             </div>
         </div>
-
-        <div id="area-endereco"><label>Endereço:</label><input type="text" id="endereco" placeholder="Rua e Bairro"></div>
+        <div id="area-endereco"><input type="text" id="endereco" placeholder="Endereço de entrega" style="margin-top:10px;"></div>
 
         <label>Pagamento:</label>
         <select id="forma-pagamento" onchange="toggleTroco()">
@@ -80,13 +79,12 @@
                     </select>
                 </div>
                 <div class="col-half" id="area-valor-troco" style="display:none;">
-                    <label>Troco para quanto?</label><input type="number" id="valor-troco">
+                    <label>Para quanto?</label><input type="number" id="valor-troco">
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="lista-produtos">Carregando catálogo...</div>
+    <div id="lista-produtos">Carregando doces...</div>
 </div>
 
 <div class="footer-fixo">
@@ -96,11 +94,11 @@
 
 <div id="modal-revisao" class="modal">
     <div class="modal-content">
-        <h3>🔍 Resumo do Pedido</h3>
+        <h3>🔍 Resumo</h3>
         <div id="corpo-resumo"></div>
-        <div id="info-cliente-resumo" style="margin-top:15px; font-size:0.9rem; line-height:1.5;"></div>
+        <div id="info-resumo" style="margin-top:15px; font-size:0.9rem;"></div>
         <button class="btn-confirmar" onclick="enviarWhatsApp()">Confirmar e Enviar</button>
-        <button class="btn-voltar" onclick="fecharRevisao()">Mudar Pedido</button>
+        <button class="btn-voltar" onclick="fecharRevisao()">Voltar</button>
     </div>
 </div>
 
@@ -115,22 +113,22 @@
             const response = await fetch(URL_PLANILHA);
             produtosData = await response.json();
             renderizarProdutos();
-        } catch (e) { document.getElementById('lista-produtos').innerHTML = "Erro ao carregar."; }
+        } catch (e) { document.getElementById('lista-produtos').innerHTML = "Erro ao carregar dados."; }
     }
 
     function renderizarProdutos() {
         const div = document.getElementById('lista-produtos');
         div.innerHTML = produtosData.map(p => `
-            <div class="produto-item ${p.disponivel ? '' : 'indisponivel'}">
+            <div class="produto-item ${p.disponivel ? '' : 'esgotado'}">
                 <img src="${p.imagem}">
                 <div class="detalhes">
                     <strong>${p.nome}</strong><br>
-                    <span style="color:var(--rosa)">R$ ${p.preco.toFixed(2)}</span><br>
-                    ${p.disponivel ? '' : '<span class="esgotado-label">Esgotado</span>'}
+                    <span>R$ ${p.preco.toFixed(2)}</span><br>
+                    ${p.disponivel ? '' : '<span class="status-esgotado">ESGOTADO</span>'}
                 </div>
                 <div class="controles">
                     <button class="btn-qtd" ${p.disponivel ? '' : 'disabled'} onclick="mudarQtd('${p.nome}', -1, ${p.preco})">-</button>
-                    <span id="qtd-${p.nome}">${carrinho[p.nome]?.qtd || 0}</span>
+                    <span id="qtd-${p.nome}">0</span>
                     <button class="btn-qtd" ${p.disponivel ? '' : 'disabled'} onclick="mudarQtd('${p.nome}', 1, ${p.preco})">+</button>
                 </div>
             </div>
@@ -152,13 +150,8 @@
         atualizarTotal();
     }
 
-    function toggleTroco() {
-        document.getElementById('area-troco').style.display = (document.getElementById('forma-pagamento').value === "Dinheiro") ? 'block' : 'none';
-    }
-
-    function toggleValorTroco() {
-        document.getElementById('area-valor-troco').style.display = (document.getElementById('precisa-troco').value === "Sim") ? 'block' : 'none';
-    }
+    function toggleTroco() { document.getElementById('area-troco').style.display = (document.getElementById('forma-pagamento').value === "Dinheiro") ? 'block' : 'none'; }
+    function toggleValorTroco() { document.getElementById('area-valor-troco').style.display = (document.getElementById('precisa-troco').value === "Sim") ? 'block' : 'none'; }
 
     function atualizarTotal() {
         let sub = 0;
@@ -169,7 +162,7 @@
     function abrirRevisao() {
         const nome = document.getElementById('nome-cliente').value;
         const data = document.getElementById('data-pedido').value;
-        if (!nome || !data) { alert("Preencha Nome e Data!"); return; }
+        if (!nome || !data) return alert("Preencha Nome e Data!");
 
         let itensHtml = "";
         let temItens = false;
@@ -179,16 +172,11 @@
                 temItens = true;
             }
         }
-        if (!temItens) { alert("Carrinho vazio!"); return; }
+        if (!temItens) return alert("Adicione itens!");
 
         const pag = document.getElementById('forma-pagamento').value;
         document.getElementById('corpo-resumo').innerHTML = itensHtml;
-        document.getElementById('info-cliente-resumo').innerHTML = `
-            <strong>Cliente:</strong> ${nome}<br>
-            <strong>Data:</strong> ${data.split('-').reverse().join('/')}<br>
-            <strong>Pagamento:</strong> ${pag}<br>
-            <strong>Total: R$ ${document.getElementById('total-valor').innerText}</strong>
-        `;
+        document.getElementById('info-resumo').innerHTML = `<strong>Nome:</strong> ${nome}<br><strong>Pagamento:</strong> ${pag}<br><strong>Total: R$ ${document.getElementById('total-valor').innerText}</strong>`;
         document.getElementById('modal-revisao').style.display = 'flex';
     }
 
@@ -201,8 +189,8 @@
         const total = document.getElementById('total-valor').innerText;
         const pag = document.getElementById('forma-pagamento').value;
 
-        let msg = `*PEDIDO CANDY DELIGHT*\n👤 *Nome:* ${nome}\n📅 *Data:* ${data}\n📍 *Tipo:* ${tipo}\n💳 *Pagamento:* ${pag}\n`;
-        if (pag === "Dinheiro" && document.getElementById('precisa-troco').value === "Sim") msg += `💵 *Troco para:* R$ ${document.getElementById('valor-troco').value}\n`;
+        let msg = `*PEDIDO ELIDA BOLOS E DOCES*\n👤 *Cliente:* ${nome}\n📅 *Data:* ${data}\n📍 *Tipo:* ${tipo}\n💳 *Pagamento:* ${pag}\n`;
+        if (pag === "Dinheiro" && document.getElementById('precisa-troco').value === "Sim") msg += `💵 *Troco p/:* R$ ${document.getElementById('valor-troco').value}\n`;
         
         msg += `\n*ITENS:*\n`;
         for (let n in carrinho) if (carrinho[n].qtd > 0) msg += `• ${carrinho[n].qtd}x ${n}\n`;
