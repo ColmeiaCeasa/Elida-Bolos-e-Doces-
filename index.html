@@ -5,33 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Candy Delight - Pedido Online</title>
     <style>
-        :root { --rosa: #ff85a2; --vinho: #8a2b42; --bg: #fff5f7; --verde: #25d366; }
-        
+        :root { --rosa: #ff85a2; --vinho: #8a2b42; --bg: #fff5f7; --verde: #25d366; --cinza: #ccc; }
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 120px; }
-        
-        header { background: var(--rosa); color: white; text-align: center; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        header { background: var(--rosa); color: white; text-align: center; padding: 20px; }
         .container { max-width: 600px; margin: auto; padding: 15px; }
 
+        /* Campos de Identificação */
         .user-info { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .user-info label { font-size: 0.9rem; font-weight: bold; color: var(--vinho); display: block; margin-bottom: 5px; margin-top: 10px; }
-        .user-info input, .user-info select { 
-            width: 100%; height: 45px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem;
-        }
-
+        .user-info input, .user-info select { width: 100%; height: 45px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
         .row-info { display: flex; gap: 10px; }
         .col-half { flex: 1; }
 
-        .produto-item { background: white; border-radius: 12px; display: flex; align-items: center; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        /* Lista de Produtos */
+        .produto-item { background: white; border-radius: 12px; display: flex; align-items: center; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; }
+        .produto-item.indisponivel { opacity: 0.6; filter: grayscale(1); }
         .produto-item img { width: 65px; height: 65px; border-radius: 8px; object-fit: cover; }
         .detalhes { flex: 1; padding: 0 12px; }
+        .esgotado-label { color: red; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; }
+
         .controles { display: flex; align-items: center; gap: 10px; }
         .btn-qtd { background: var(--rosa); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        .btn-qtd:disabled { background: var(--cinza); cursor: not-allowed; }
 
+        /* Barra Fixa Inferior */
         .footer-fixo { position: fixed; bottom: 0; width: 100%; background: white; border-top: 3px solid var(--rosa); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
         .total-box { font-size: 1.2rem; font-weight: bold; color: var(--vinho); }
         .btn-revisar { background: var(--rosa); color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; }
 
+        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; width: 90%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; }
         .resumo-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; }
@@ -41,9 +44,7 @@
 </head>
 <body>
 
-<header>
-    <h1>🍬 Loja de Doces</h1>
-</header>
+<header><h1>🍬 Loja de Doces</h1></header>
 
 <div class="container">
     <div class="user-info">
@@ -51,10 +52,7 @@
         <input type="text" id="nome-cliente" placeholder="Como te chamamos?">
         
         <div class="row-info">
-            <div class="col-half">
-                <label>Data:</label>
-                <input type="date" id="data-pedido">
-            </div>
+            <div class="col-half"><label>Data:</label><input type="date" id="data-pedido"></div>
             <div class="col-half">
                 <label>Tipo:</label>
                 <select id="tipo-entrega" onchange="toggleFrete()">
@@ -64,14 +62,11 @@
             </div>
         </div>
 
-        <div id="area-endereco">
-            <label>Endereço:</label>
-            <input type="text" id="endereco" placeholder="Rua e Bairro">
-        </div>
+        <div id="area-endereco"><label>Endereço:</label><input type="text" id="endereco" placeholder="Rua e Bairro"></div>
 
-        <label>Forma de Pagamento:</label>
+        <label>Pagamento:</label>
         <select id="forma-pagamento" onchange="toggleTroco()">
-            <option value="Cartão">💳 Cartão (Maquininha)</option>
+            <option value="Cartão">💳 Cartão</option>
             <option value="PIX">✨ PIX</option>
             <option value="Dinheiro">💵 Dinheiro</option>
         </select>
@@ -79,15 +74,13 @@
         <div id="area-troco" style="display:none;">
             <div class="row-info">
                 <div class="col-half">
-                    <label>Precisa de troco?</label>
+                    <label>Troco?</label>
                     <select id="precisa-troco" onchange="toggleValorTroco()">
-                        <option value="Não">Não</option>
-                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option><option value="Sim">Sim</option>
                     </select>
                 </div>
                 <div class="col-half" id="area-valor-troco" style="display:none;">
-                    <label>Troco para quanto?</label>
-                    <input type="number" id="valor-troco" placeholder="Ex: 50">
+                    <label>Troco para quanto?</label><input type="number" id="valor-troco">
                 </div>
             </div>
         </div>
@@ -122,22 +115,23 @@
             const response = await fetch(URL_PLANILHA);
             produtosData = await response.json();
             renderizarProdutos();
-        } catch (e) { document.getElementById('lista-produtos').innerHTML = "Erro ao conectar."; }
+        } catch (e) { document.getElementById('lista-produtos').innerHTML = "Erro ao carregar."; }
     }
 
     function renderizarProdutos() {
         const div = document.getElementById('lista-produtos');
         div.innerHTML = produtosData.map(p => `
-            <div class="produto-item">
+            <div class="produto-item ${p.disponivel ? '' : 'indisponivel'}">
                 <img src="${p.imagem}">
                 <div class="detalhes">
                     <strong>${p.nome}</strong><br>
-                    <span style="color:var(--rosa)">R$ ${p.preco.toFixed(2)}</span>
+                    <span style="color:var(--rosa)">R$ ${p.preco.toFixed(2)}</span><br>
+                    ${p.disponivel ? '' : '<span class="esgotado-label">Esgotado</span>'}
                 </div>
                 <div class="controles">
-                    <button class="btn-qtd" onclick="mudarQtd('${p.nome}', -1, ${p.preco})">-</button>
-                    <span id="qtd-${p.nome}">0</span>
-                    <button class="btn-qtd" onclick="mudarQtd('${p.nome}', 1, ${p.preco})">+</button>
+                    <button class="btn-qtd" ${p.disponivel ? '' : 'disabled'} onclick="mudarQtd('${p.nome}', -1, ${p.preco})">-</button>
+                    <span id="qtd-${p.nome}">${carrinho[p.nome]?.qtd || 0}</span>
+                    <button class="btn-qtd" ${p.disponivel ? '' : 'disabled'} onclick="mudarQtd('${p.nome}', 1, ${p.preco})">+</button>
                 </div>
             </div>
         `).join('');
@@ -159,13 +153,11 @@
     }
 
     function toggleTroco() {
-        const pag = document.getElementById('forma-pagamento').value;
-        document.getElementById('area-troco').style.display = (pag === "Dinheiro") ? 'block' : 'none';
+        document.getElementById('area-troco').style.display = (document.getElementById('forma-pagamento').value === "Dinheiro") ? 'block' : 'none';
     }
 
     function toggleValorTroco() {
-        const simNao = document.getElementById('precisa-troco').value;
-        document.getElementById('area-valor-troco').style.display = (simNao === "Sim") ? 'block' : 'none';
+        document.getElementById('area-valor-troco').style.display = (document.getElementById('precisa-troco').value === "Sim") ? 'block' : 'none';
     }
 
     function atualizarTotal() {
@@ -180,31 +172,22 @@
         if (!nome || !data) { alert("Preencha Nome e Data!"); return; }
 
         let itensHtml = "";
-        let totalFinal = document.getElementById('total-valor').innerText;
         let temItens = false;
-
         for (let n in carrinho) {
             if (carrinho[n].qtd > 0) {
                 itensHtml += `<div class="resumo-item"><span>${carrinho[n].qtd}x ${n}</span><span>R$ ${(carrinho[n].qtd * carrinho[n].preco).toFixed(2)}</span></div>`;
                 temItens = true;
             }
         }
-
         if (!temItens) { alert("Carrinho vazio!"); return; }
 
         const pag = document.getElementById('forma-pagamento').value;
-        let infoPag = pag;
-        if (pag === "Dinheiro") {
-            const troco = document.getElementById('precisa-troco').value;
-            infoPag += (troco === "Sim") ? ` (Troco para R$ ${document.getElementById('valor-troco').value})` : " (Sem troco)";
-        }
-
         document.getElementById('corpo-resumo').innerHTML = itensHtml;
         document.getElementById('info-cliente-resumo').innerHTML = `
             <strong>Cliente:</strong> ${nome}<br>
             <strong>Data:</strong> ${data.split('-').reverse().join('/')}<br>
-            <strong>Pagamento:</strong> ${infoPag}<br>
-            <strong>Total: R$ ${totalFinal}</strong>
+            <strong>Pagamento:</strong> ${pag}<br>
+            <strong>Total: R$ ${document.getElementById('total-valor').innerText}</strong>
         `;
         document.getElementById('modal-revisao').style.display = 'flex';
     }
@@ -215,23 +198,14 @@
         const nome = document.getElementById('nome-cliente').value;
         const data = document.getElementById('data-pedido').value.split('-').reverse().join('/');
         const tipo = document.getElementById('tipo-entrega').value;
-        const endereco = document.getElementById('endereco').value;
         const total = document.getElementById('total-valor').innerText;
         const pag = document.getElementById('forma-pagamento').value;
 
-        let msg = `*PEDIDO CANDY DELIGHT*\n\n👤 *Nome:* ${nome}\n📅 *Data:* ${data}\n📍 *Tipo:* ${tipo}\n`;
-        if(tipo === "Entrega") msg += `🏠 *End:* ${endereco}\n`;
+        let msg = `*PEDIDO CANDY DELIGHT*\n👤 *Nome:* ${nome}\n📅 *Data:* ${data}\n📍 *Tipo:* ${tipo}\n💳 *Pagamento:* ${pag}\n`;
+        if (pag === "Dinheiro" && document.getElementById('precisa-troco').value === "Sim") msg += `💵 *Troco para:* R$ ${document.getElementById('valor-troco').value}\n`;
         
-        msg += `💳 *Pagamento:* ${pag}`;
-        if (pag === "Dinheiro") {
-            const troco = document.getElementById('precisa-troco').value;
-            msg += (troco === "Sim") ? ` (Troco para R$ ${document.getElementById('valor-troco').value})` : " (Sem troco)";
-        }
-        
-        msg += `\n\n*ITENS:*\n`;
-        for (let n in carrinho) {
-            if (carrinho[n].qtd > 0) msg += `• ${carrinho[n].qtd}x ${n}\n`;
-        }
+        msg += `\n*ITENS:*\n`;
+        for (let n in carrinho) if (carrinho[n].qtd > 0) msg += `• ${carrinho[n].qtd}x ${n}\n`;
         msg += `\n*TOTAL: R$ ${total}*`;
 
         window.open(`https://wa.me/5512997093704?text=${encodeURIComponent(msg)}`);
