@@ -2,202 +2,226 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Candy Delight - Pedido Online</title>
     <style>
-        :root { --rosa: #ff85a2; --vinho: #8a2b42; --bg: #fff5f7; --verde: #25d366; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 120px; }
-        
-        header { background: var(--rosa); color: white; text-align: center; padding: 20px; }
+        /* Variáveis de Cores */
+        :root { 
+            --rosa: #ff85a2; 
+            --vinho: #8a2b42; 
+            --bg: #fff5f7; 
+            --verde: #25d366; 
+            --branco: #ffffff;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding-bottom: 110px; /* Espaço para a barra fixa */
+            color: #444;
+        }
+
+        header { 
+            background: var(--rosa); 
+            color: white; 
+            text-align: center; 
+            padding: 25px 15px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
         .container { max-width: 600px; margin: auto; padding: 15px; }
 
         /* Campos de Identificação */
-        .user-info { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .user-info input, .user-info select { width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .user-info { 
+            background: var(--branco); 
+            padding: 18px; 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+        }
+        
+        .user-info label { 
+            display: block;
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            color: var(--vinho);
+            margin-bottom: 4px;
+        }
+
+        .user-info input, .user-info select { 
+            width: 100%; 
+            height: 48px; /* Altura padrão para mobile */
+            padding: 10px 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            font-size: 1rem;
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .user-info input:focus { border-color: var(--rosa); }
+
+        /* Ajuste de Proporção: Data e Tipo lado a lado */
+        .row-info { 
+            display: flex; 
+            gap: 12px; 
+            margin-top: 15px; 
+            align-items: flex-end;
+        }
+        .col-half { flex: 1; min-width: 0; }
 
         /* Lista de Produtos */
-        .produto-item { background: white; border-radius: 12px; display: flex; align-items: center; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .produto-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+        .produto-item { 
+            background: var(--branco); 
+            border-radius: 15px; 
+            display: flex; 
+            align-items: center; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); 
+        }
+        .produto-item img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; }
         .detalhes { flex: 1; padding: 0 12px; }
-        .controles { display: flex; align-items: center; gap: 8px; }
-        .btn-qtd { background: var(--rosa); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
+        .detalhes strong { font-size: 1rem; color: #333; }
+        .detalhes span { color: var(--rosa); font-weight: bold; font-size: 1.1rem; }
+
+        /* Controles de Quantidade */
+        .controles { display: flex; align-items: center; gap: 12px; background: #f9f9f9; padding: 5px 10px; border-radius: 25px; }
+        .btn-qtd { 
+            background: var(--rosa); 
+            border: none; 
+            color: white; 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qtd-num { font-weight: bold; min-width: 20px; text-align: center; }
 
         /* Barra Fixa Inferior */
-        .footer-fixo { position: fixed; bottom: 0; width: 100%; background: white; border-top: 3px solid var(--rosa); padding: 15px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; z-index: 999; }
-        .total-box { font-size: 1.1rem; font-weight: bold; color: var(--vinho); }
-        .btn-revisar { background: var(--rosa); color: white; border: none; padding: 12px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; }
+        .footer-fixo { 
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            background: var(--branco); 
+            border-top: 3px solid var(--rosa); 
+            padding: 15px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            z-index: 999; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.08);
+        }
+        .total-box { display: flex; flex-direction: column; }
+        .total-box small { font-size: 0.75rem; color: #888; text-transform: uppercase; }
+        .total-box span { font-size: 1.4rem; font-weight: bold; color: var(--vinho); }
+        
+        .btn-revisar { 
+            background: var(--rosa); 
+            color: white; 
+            border: none; 
+            padding: 14px 25px; 
+            border-radius: 30px; 
+            font-weight: bold; 
+            font-size: 1rem;
+            cursor: pointer; 
+            transition: transform 0.2s;
+        }
+        .btn-revisar:active { transform: scale(0.95); }
 
         /* Modal de Revisão */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; width: 90%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 80vh; overflow-y: auto; }
-        .resumo-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; }
-        .btn-confirmar { background: var(--verde); color: white; width: 100%; border: none; padding: 15px; border-radius: 10px; margin-top: 15px; font-weight: bold; cursor: pointer; }
-        .btn-voltar { background: #ccc; width: 100%; border: none; padding: 10px; border-radius: 10px; margin-top: 8px; cursor: pointer; }
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.7); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+        }
+        .modal-content { 
+            background: white; 
+            width: 100%; 
+            max-width: 450px; 
+            border-radius: 20px; 
+            padding: 25px; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+        .resumo-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #eee; }
+        .btn-confirmar { background: var(--verde); color: white; width: 100%; border: none; padding: 16px; border-radius: 12px; margin-top: 20px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+        .btn-voltar { background: transparent; color: #888; width: 100%; border: none; padding: 10px; margin-top: 10px; cursor: pointer; text-decoration: underline; }
+
+        /* Estilo Loading */
+        #loading { text-align: center; padding: 50px; color: var(--rosa); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>🍬 Loja de Doces</h1>
+    <h1>🍬 Candy Delight</h1>
+    <p style="margin: 5px 0 0 0; opacity: 0.9;">Escolha suas doçuras favoritas</p>
 </header>
 
 <div class="container">
     <div class="user-info">
-        <label>Seu Nome:</label>
-        <input type="text" id="nome-cliente" placeholder="Como podemos te chamar?">
+        <label>Nome do Cliente:</label>
+        <input type="text" id="nome-cliente" placeholder="Como te chamamos?">
         
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <div style="flex:1">
-                <label>Data:</label>
+        <div class="row-info">
+            <div class="col-half">
+                <label>Data Pedido:</label>
                 <input type="date" id="data-pedido">
             </div>
-            <div style="flex:1">
-                <label>Tipo:</label>
+            <div class="col-half">
+                <label>Retirada/Entrega:</label>
                 <select id="tipo-entrega" onchange="toggleFrete()">
                     <option value="Entrega">🚀 Entrega</option>
                     <option value="Retirada">🛍️ Retirada</option>
                 </select>
             </div>
         </div>
-        <div id="area-endereco" style="margin-top:10px;">
-            <label>Endereço:</label>
-            <input type="text" id="endereco" placeholder="Rua, número, bairro">
+
+        <div id="area-endereco" style="margin-top:15px;">
+            <label>Endereço Completo:</label>
+            <input type="text" id="endereco" placeholder="Rua, número e bairro">
         </div>
     </div>
 
-    <div id="lista-produtos">Carregando catálogo...</div>
+    <div id="lista-produtos">
+        <div id="loading">Buscando doçuras na planilha...</div>
+    </div>
 </div>
 
 <div class="footer-fixo">
-    <div class="total-box">Total: R$ <span id="total-valor">0,00</span></div>
+    <div class="total-box">
+        <small>Total do Pedido</small>
+        <span>R$ <span id="total-valor">0,00</span></span>
+    </div>
     <button class="btn-revisar" onclick="abrirRevisao()">Revisar Pedido</button>
 </div>
 
 <div id="modal-revisao" class="modal">
     <div class="modal-content">
-        <h3>🔍 Revise seu Pedido</h3>
+        <h2 style="color: var(--vinho); margin-top: 0;">📋 Revisão</h2>
         <div id="corpo-resumo"></div>
-        <hr>
-        <div id="dados-cliente-resumo"></div>
-        <button class="btn-confirmar" onclick="enviarWhatsApp()">Confirmar e Enviar (WhatsApp)</button>
-        <button class="btn-voltar" onclick="fecharRevisao()">Voltar e Alterar</button>
+        <div id="dados-cliente-resumo" style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-top: 15px;"></div>
+        
+        <button class="btn-confirmar" onclick="enviarWhatsApp()">✅ Enviar para o WhatsApp</button>
+        <button class="btn-voltar" onclick="fecharRevisao()">Voltar e mudar algo</button>
     </div>
 </div>
 
 <script>
-    const URL_PLANILHA = "https://script.google.com/macros/s/AKfycbzBD8bZ86uvFAGUKI6Ga_ZHzEEpXRZK9NMBEwujZ_pQrdLtLZtaqFiVZNAoXmkvo2oT_Q/exec"; 
-    let produtosData = [];
-    let carrinho = {};
-    let valorFrete = 5.00;
-
-    // Carrega dados da Planilha
-    async function carregarProdutos() {
-        try {
-            const response = await fetch(URL_PLANILHA);
-            produtosData = await response.json();
-            renderizarProdutos();
-        } catch (e) { document.getElementById('lista-produtos').innerHTML = "Erro ao carregar dados."; }
-    }
-
-    function renderizarProdutos() {
-        const div = document.getElementById('lista-produtos');
-        div.innerHTML = produtosData.map(p => `
-            <div class="produto-item">
-                <img src="${p.imagem}" alt="${p.nome}">
-                <div class="detalhes">
-                    <strong>${p.nome}</strong><br>
-                    <span style="color:var(--rosa)">R$ ${p.preco.toFixed(2)}</span>
-                </div>
-                <div class="controles">
-                    <button class="btn-qtd" onclick="mudarQtd('${p.nome}', -1, ${p.preco})">-</button>
-                    <span id="qtd-${p.nome}" style="font-weight:bold">0</span>
-                    <button class="btn-qtd" onclick="mudarQtd('${p.nome}', 1, ${p.preco})">+</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function mudarQtd(nome, delta, preco) {
-        if (!carrinho[nome]) carrinho[nome] = { qtd: 0, preco: preco };
-        carrinho[nome].qtd += delta;
-        if (carrinho[nome].qtd < 0) carrinho[nome].qtd = 0;
-        document.getElementById(`qtd-${nome}`).innerText = carrinho[nome].qtd;
-        atualizarPrecoTotal();
-    }
-
-    function toggleFrete() {
-        const tipo = document.getElementById('tipo-entrega').value;
-        valorFrete = (tipo === "Entrega") ? 5.00 : 0;
-        document.getElementById('area-endereco').style.display = (tipo === "Entrega") ? 'block' : 'none';
-        atualizarPrecoTotal();
-    }
-
-    function atualizarPrecoTotal() {
-        let subtotal = 0;
-        for (let n in carrinho) subtotal += carrinho[n].qtd * carrinho[n].preco;
-        document.getElementById('total-valor').innerText = (subtotal + valorFrete).toFixed(2);
-    }
-
-    function abrirRevisao() {
-        const nome = document.getElementById('nome-cliente').value;
-        const data = document.getElementById('data-pedido').value;
-        
-        if (!nome || !data) {
-            alert("Por favor, preencha seu Nome e a Data!");
-            return;
-        }
-
-        let htmlResumo = "";
-        let temItens = false;
-        for (let n in carrinho) {
-            if (carrinho[n].qtd > 0) {
-                htmlResumo += `<div class="resumo-item"><span>${carrinho[n].qtd}x ${n}</span> <span>R$ ${(carrinho[n].qtd * carrinho[n].preco).toFixed(2)}</span></div>`;
-                temItens = true;
-            }
-        }
-
-        if (!temItens) { alert("Seu carrinho está vazio!"); return; }
-
-        const tipo = document.getElementById('tipo-entrega').value;
-        const total = document.getElementById('total-valor').innerText;
-        
-        document.getElementById('corpo-resumo').innerHTML = htmlResumo;
-        document.getElementById('dados-cliente-resumo').innerHTML = `
-            <p><strong>Cliente:</strong> ${nome}</p>
-            <p><strong>Data:</strong> ${data.split('-').reverse().join('/')}</p>
-            <p><strong>Método:</strong> ${tipo} (Frete: R$ ${valorFrete.toFixed(2)})</p>
-            <p style="font-size:1.2rem; color:var(--vinho)"><strong>Total: R$ ${total}</strong></p>
-        `;
-        document.getElementById('modal-revisao').style.display = 'flex';
-    }
-
-    function fecharRevisao() { document.getElementById('modal-revisao').style.display = 'none'; }
-
-    function enviarWhatsApp() {
-        const nome = document.getElementById('nome-cliente').value;
-        const data = document.getElementById('data-pedido').value.split('-').reverse().join('/');
-        const tipo = document.getElementById('tipo-entrega').value;
-        const endereco = document.getElementById('endereco').value;
-        const total = document.getElementById('total-valor').innerText;
-
-        let msg = `*NOVO PEDIDO - CANDY DELIGHT*\n\n`;
-        msg += `👤 *Cliente:* ${nome}\n`;
-        msg += `📅 *Data:* ${data}\n`;
-        msg += `📍 *Método:* ${tipo}\n`;
-        if(tipo === "Entrega") msg += `🏠 *Endereço:* ${endereco}\n`;
-        msg += `\n*ITENS:* \n`;
-
-        for (let n in carrinho) {
-            if (carrinho[n].qtd > 0) msg += `• ${carrinho[n].qtd}x ${n}\n`;
-        }
-
-        msg += `\n💰 *VALOR TOTAL: R$ ${total}*`;
-        
-        const fone = "5511999999999"; // <-- COLOQUE SEU TELEFONE AQUI
-        window.open(`https://wa.me/${fone}?text=${encodeURIComponent(msg)}`);
-    }
-
-    carregarProdutos();
-</script>
-</body>
-</html>
+    // --- CONFIGURAÇÃO ---
+    const URL_PLANILHA = "SUA_URL_DO_APPS_SCRIPT_AQUI"; // Cole sua URL aqui
+    const WHATSAPP_NUMERO = "5511999999
