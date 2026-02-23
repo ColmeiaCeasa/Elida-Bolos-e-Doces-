@@ -53,7 +53,7 @@
 <div class="container">
     <div class="user-info">
         <label>Seu Nome:</label>
-        <input type="text" id="nome-cliente" placeholder="Como te chamamos?">
+        <input type="text" id="nome-cliente" placeholder="Seu nome aqui?">
         
         <div class="row-info">
             <div class="col-half">
@@ -61,10 +61,10 @@
                 <input type="date" id="data-pedido">
             </div>
             <div class="col-half">
-                <label>Tipo:</label>
+                <label>Entregar ou Retirar?:</label>
                 <select id="tipo-entrega" onchange="toggleFrete()">
-                    <option value="Entrega">🚀 Entrega</option>
-                    <option value="Retirada">🛍️ Retirada</option>
+                    <option value="Entrega">🚀 Entregar</option>
+                    <option value="Retirada">🛍️ Retirar</option>
                 </select>
             </div>
         </div>
@@ -181,7 +181,7 @@
         const endereco = document.getElementById('endereco').value;
         const total = document.getElementById('total-valor').innerText;
 
-        let msg = `*PEDIDO CANDY DELIGHT*\n\n👤 *Nome:* ${nome}\n📅 *Data:* ${data}\n📍 *Tipo:* ${tipo}\n`;
+        let msg = `*PEDIDO ELIDA DOCES E BOLOS*\n\n👤 *Nome:* ${nome}\n📅 *Data:* ${data}\n📍 *Tipo:* ${tipo}\n`;
         if(tipo === "Entrega") msg += `🏠 *End:* ${endereco}\n`;
         msg += `\n*ITENS:*\n`;
 
